@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.tree import plot_tree
+from sklearn.preprocessing import LabelEncoder
 
 
 xtrain = pd.read_csv("xtrain.csv")
@@ -16,6 +17,7 @@ ytest = pd.read_csv("ytest.csv")
 param_grid = {
     'max_depth': [None, 5, 10, 15, 20, 25],
     'min_samples_leaf': [3, 5, 7, 10, 15], 
+    'criterion': ['gini', 'entropy']
 }
 clf = DecisionTreeClassifier()
 grid_search_dt = GridSearchCV(estimator=clf, param_grid=param_grid)
@@ -38,7 +40,6 @@ print(report)
 cm = confusion_matrix(ytest, y_prob)
 print(cm)"""
 
-from sklearn.preprocessing import LabelEncoder
 # had to do label encoding because the numerical ones would not plot properly for some reason
 classnames = ['(O) No Injury', '(C) Possible Injury / Complaint',
                'B) Suspected Minor/Visible Injury',

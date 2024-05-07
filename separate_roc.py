@@ -34,7 +34,7 @@ classifiers = {
     'Logistic Regression': LogisticRegression(C=0.1, penalty='l2')
 }
 
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(15, 10))
 
 for name, clf in classifiers.items():
     clf.fit(xtrain, ytrain)
@@ -47,15 +47,17 @@ for name, clf in classifiers.items():
     ytest_bin = label_binarize(ytest, classes=np.unique(ytrain))
     n_classes = ytest_bin.shape[1]
 
-    fpr, tpr, _ = roc_curve(ytest_bin.ravel(), y_score.ravel())
-    roc_auc = auc(fpr, tpr)
-    plt.plot(fpr, tpr, label=f'{name} (micro-average AUC = {roc_auc:.2f})')
+    plt.figure()
+    for i in range(n_classes):
+        fpr, tpr, _ = roc_curve(ytest_bin[:, i], y_score[:, i])
+        roc_auc = auc(fpr, tpr)
 
+        plt.plot(fpr, tpr, label=f'Class {i} (AUC = {roc_auc:.2f})')
 
-plt.plot([0, 1], [0, 1], linestyle='--', color='gray')
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC Curves by class')
-plt.legend(loc="lower right")
-plt.grid(True)
-plt.show()
+    plt.plot([0, 1], [0, 1], linestyle='--', color='gray')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(f'ROC Curves for {name}')
+    plt.legend(loc="lower right")
+    plt.grid(True)
+    plt.show()
